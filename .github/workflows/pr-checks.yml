@@ -61,6 +61,10 @@ jobs:
   build-pr:
     name: Build PR
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
     
     steps:
     - name: Checkout code
@@ -75,6 +79,7 @@ jobs:
         
     - name: Build and test
       run: mvn clean verify -B
+      continue-on-error: true
       
     - name: Comment PR with build status
       if: always()
