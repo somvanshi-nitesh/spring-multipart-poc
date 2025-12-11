@@ -1,0 +1,140 @@
+openapi: 3.0.3
+info:
+  title: File Upload API
+  description: REST API for handling large file uploads (3MB+)
+  version: 1.0.0
+  
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /api/v1/files/upload:
+    post:
+      tags:
+        - File Upload
+      summary: Upload a file
+      description: Upload files up to 50MB
+      operationId: uploadFile
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload (max 50MB)
+      responses:
+        '200':
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResponse'
+        '400':
+          description: Bad request - empty file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: Payload too large - file exceeds 50MB
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/health:
+    get:
+      tags:
+        - Health
+      summary: Health check
+      description: Check API status and configuration
+      operationId: healthCheck
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: UP
+                  maxFileSize:
+                    type: string
+                    example: 50MB
+                  maxRequestSize:
+                    type: string
+                    example: 100MB
+                  service:
+                    type: string
+                    example: File Upload API
+                  version:
+                    type: string
+                    example: 1.0.0
+
+components:
+  schemas:
+    FileUploadResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: File uploaded successfully
+        fileName:
+          type: string
+          example: document.pdf
+        originalFileName:
+          type: string
+          example: document.pdf
+        contentType:
+          type: string
+          example: application/pdf
+        size:
+          type: integer
+          format: int64
+          example: 3145728
+        sizeInMB:
+          type: number
+          format: double
+          example: 3.0
+        checksum:
+          type: string
+          example: N/A
+        uploadTimestamp:
+          type: string
+          format: date-time
+          example: '2025-12-11T12:00:00'
+      required:
+        - success
+        - fileName
+        - size
+        
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: FILE_SIZE_EXCEEDED
+        message:
+          type: string
+          example: File size exceeds maximum limit
+      required:
+        - error
+        - message
