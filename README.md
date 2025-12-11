@@ -172,4 +172,70 @@ This is the **standard, production-ready fix** for Spring Boot file upload issue
 
 ---
 
-**Built with:** Spring Boot 3.2.0 | Java 11+ | Maven
+## 🚀 CI/CD & Deployment
+
+### Build Locally
+```bash
+# Clean and build
+mvn clean package
+
+# Run tests
+mvn test
+
+# Run application
+mvn spring-boot:run
+```
+
+### Build Docker Image
+```bash
+# Build the image
+docker build -t spring-multipart-poc .
+
+# Run the container
+docker run -p 8080:8080 spring-multipart-poc
+
+# Run with custom port
+docker run -p 9090:8080 spring-multipart-poc
+
+# Run with environment variables
+docker run -p 8080:8080 \
+  -e SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=100MB \
+  spring-multipart-poc
+```
+
+### Trigger a Release
+```bash
+# Create and push a version tag
+git tag v1.0.0
+git push origin v1.0.0
+
+# This will:
+# ✅ Build the application
+# ✅ Create a GitHub release
+# ✅ Publish Docker image to GitHub Container Registry
+# ✅ Upload JAR artifacts
+```
+
+### GitHub Actions Workflows
+
+**Main CI Pipeline** (`.github/workflows/build.yml`)
+- Runs on: Push to `main`/`develop`, Pull Requests
+- Jobs: Build → Test → Code Quality → Security Scan
+- Artifacts: JAR files, test reports
+
+**Release Pipeline** (`.github/workflows/release.yml`)
+- Runs on: Version tags (`v*.*.*`)
+- Jobs: Build release → Create GitHub release → Publish Docker image
+
+**PR Checks** (`.github/workflows/pr-checks.yml`)
+- Runs on: Pull Requests
+- Validates PR titles, lints code, runs tests
+
+### Download Artifacts
+After each build, download artifacts from GitHub Actions:
+- `spring-multipart-poc-{sha}.jar` - Application JAR
+- `test-results-{sha}` - Test reports
+
+---
+
+**Built with:** Spring Boot 3.2.0 | Java 17 | Maven
