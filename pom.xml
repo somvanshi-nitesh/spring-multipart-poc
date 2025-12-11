@@ -46,6 +46,13 @@
             <version>2.3.0</version>
         </dependency>
 
+        <!-- Jackson Nullable for OpenAPI Generator -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.6</version>
+        </dependency>
+
         <!-- Lombok for cleaner code -->
         <dependency>
             <groupId>org.projectlombok</groupId>
