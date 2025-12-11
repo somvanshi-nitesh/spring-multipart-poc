@@ -1,0 +1,12 @@
+package com.example.multipart;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MultipartPocApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MultipartPocApplication.class, args);
+    }
+}
