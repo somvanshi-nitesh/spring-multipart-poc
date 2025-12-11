@@ -188,7 +188,7 @@ mvn spring-boot:run
 
 ### Build Docker Image
 ```bash
-# Build the image
+# Build the image locally
 docker build -t spring-multipart-poc .
 
 # Run the container
@@ -201,6 +201,21 @@ docker run -p 9090:8080 spring-multipart-poc
 docker run -p 8080:8080 \
   -e SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=100MB \
   spring-multipart-poc
+```
+
+### Pull from GitHub Container Registry
+```bash
+# Pull the latest image
+docker pull ghcr.io/somvanshi-nitesh/spring-multipart-poc:latest
+
+# Run the container
+docker run -p 8080:8080 ghcr.io/somvanshi-nitesh/spring-multipart-poc:latest
+
+# Run in detached mode
+docker run -d -p 8080:8080 --name multipart-app ghcr.io/somvanshi-nitesh/spring-multipart-poc:latest
+
+# Test the application
+curl http://localhost:8080/api/v1/health
 ```
 
 ### Trigger a Release
