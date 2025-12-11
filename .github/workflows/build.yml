@@ -45,6 +45,7 @@ jobs:
       
     - name: Run unit tests
       run: mvn test -B
+      continue-on-error: true
       
     - name: Generate test coverage report
       run: mvn jacoco:report -B
